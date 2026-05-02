@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>잘한다 잘한다</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding: 40px 20px;
+      font-family: sans-serif;
+      background: #ffffff;
+      overflow: hidden;
+      position: relative;
+    }
+    h1 { font-size: 28px; font-weight: 500; color: #111; }
+    #poop-btn {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: #f5f5f5;
+      border: 2.5px solid #ddd;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 160px;
+      line-height: 1;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      user-select: none;
+      box-shadow: 0 2px 0 #ddd;
+      overflow: visible;
+    }
+    #poop-btn:hover { transform: scale(1.05); box-shadow: 0 6px 0 #ddd; }
+    #poop-btn:active { transform: scale(0.95) translateY(2px); box-shadow: 0 1px 0 #ddd; }
+    #poop-btn.pop { animation: pop 0.32s ease; }
+    @keyframes pop {
+      0%   { transform: scale(1); }
+      35%  { transform: scale(1.18) rotate(-6deg); }
+      65%  { transform: scale(0.96) rotate(4deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+    #message { font-size: 22px; font-weight: 500; color: #111; min-height: 32px; opacity: 0; transition: opacity 0.25s; text-align: center; }
+    #message.show { opacity: 1; }
+    #count { font-size: 14px; color: #888; }
+    .confetti-piece { position: absolute; pointer-events: none; animation: fall linear forwards; }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <h1>잘한다 잘한다 🎉</h1>
+  <button id="poop-btn" onclick="celebrate()">💩</button>
+  <div id="message"></div>
+  <div id="count">아직 아무것도 안 눌렀어요</div>
+
+  <script>
+    let clickCount = 0;
+    const messages = [
+      "와 진짜 잘한다!! 👏👏👏",
+      "최고야!! 역시 믿었어!! 🌟",
+      "대단해!! 천재 아니야?? ✨",
+      "또 해줘!! 너무 잘해!! 🔥",
+      "와 이번엔 더 잘했어!! 🚀",
+      "진짜진짜 잘한다!! 💪",
+      "너 때문에 행복해!! 🥹",
+    ];
+    const colors = ['#FF6B6B','#FFD93D','#6BCB77','#4D96FF','#FF922B','#CC5DE8','#20C997'];
+
+    function celebrate() {
+      clickCount++;
+      const btn = document.getElementById('poop-btn');
+      const msg = document.getElementById('message');
+      const cnt = document.getElementById('count');
+      btn.classList.remove('pop');
+      void btn.offsetWidth;
+      btn.classList.add('pop');
+      msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+      msg.classList.remove('show');
+      void msg.offsetWidth;
+      msg.classList.add('show');
+      cnt.textContent = `${clickCount}번 칭찬받음 🏆`;
+      launchConfetti();
+    }
+
+    function launchConfetti() {
+      for (let i = 0; i < 40; i++) {
+        const c = document.createElement('div');
+        c.className = 'confetti-piece';
+        c.style.left = (15 + Math.random() * 70) + '%';
+        c.style.top = (5 + Math.random() * 35) + '%';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        const size = (8 + Math.random() * 9) + 'px';
+        c.style.width = size;
+        c.style.height = size;
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        c.style.animationDuration = (0.9 + Math.random() * 1.1) + 's';
+        c.style.animationDelay = (Math.random() * 0.25) + 's';
+        document.body.appendChild(c);
+        c.addEventListener('animationend', () => c.remove());
+      }
+    }
+  </script>
+</body>
+</html>
